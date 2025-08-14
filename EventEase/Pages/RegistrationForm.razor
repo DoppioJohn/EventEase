@@ -1,0 +1,45 @@
+<EditForm Model="@registration" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="name">Name:</label>
+        <InputText id="name" class="form-control" @bind-Value="registration.Name" />
+        <ValidationMessage For="@(() => registration.Name)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="email">Email:</label>
+        <InputText id="email" class="form-control" @bind-Value="registration.Email" />
+        <ValidationMessage For="@(() => registration.Email)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register</button>
+</EditForm>
+
+@if (successMessage != null)
+{
+    <div class="alert alert-success mt-3">@successMessage</div>
+}
+
+@code {
+    private RegistrationModel registration = new();
+
+    private string? successMessage;
+
+    private void HandleValidSubmit()
+    {
+        // Add registration logic here (e.g., store user info or update attendance)
+        successMessage = $"Thanks for registering, {registration.Name}!";
+    }
+
+    public class RegistrationModel
+    {
+        [Required(ErrorMessage = "Name is required")]
+        public string? Name { get; set; }
+
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
+        public string? Email { get; set; }
+    }
+}
